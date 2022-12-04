@@ -25,13 +25,22 @@ const total = lines
     const right = line.slice(midPoint, line.length).split("");
 
     const doubles = left
+      // find ID present in both parts
       .filter((l) => right.some((r) => r === l))
+
+      // remove duplicates
       .filter(removeDuplicates)
+
+      // convert to numbers
       .map(letterToNumber)
+
+      // sum
       .reduce((accumulator, currentValue) => accumulator + currentValue, 0);
 
     return doubles;
   })
+
+  // sum
   .reduce((accumulator, currentValue) => accumulator + currentValue, 0);
 
 console.log(total);

@@ -26,9 +26,16 @@ const overlapAtAll = (range1: Range, range2: Range) => {
 };
 
 const overlappingPairs = lines
+  // remove empty lines
   .filter((line) => line.trim())
+
+  // split comma separated pairs
   .map((line) => line.split(","))
+
+  // parse pairs' ranges
   .map((pair) => pair.map(parseRange))
+
+  // keep pairs with partial overlap
   .filter((pair) => overlapAtAll(pair[0], pair[1]));
 
 console.log("pairs:", overlappingPairs.length);

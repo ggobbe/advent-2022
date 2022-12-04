@@ -36,7 +36,10 @@ const input = await Deno.readTextFile("./input2");
 const lines = input.split("\n");
 
 const strategy: Game[] = lines
+  // remove invalid lines
   .filter((l) => /^([A|B|C]) ([X|Y|Z])$/.test(l))
+
+  // parse strategy
   .map((l) => {
     const match = l.match(/^([A|B|C]) ([X|Y|Z])$/);
     if (!match) {

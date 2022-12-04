@@ -21,6 +21,7 @@ let score = 0;
 
 score = chunks.reduce((accumulator, chunk) => {
   const sticker = chunk[0].find(
+    // find ID present in all chunks
     (c) => chunk[1].includes(c) && chunk[2].includes(c)
   );
 
