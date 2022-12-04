@@ -1,4 +1,4 @@
-const input = await Deno.readTextFile("./input3");
+const input = await Deno.readTextFile("./inputs/input3");
 const lines = input.split("\n");
 
 const removeDuplicates = (value: string, index: number, self: string[]) => {

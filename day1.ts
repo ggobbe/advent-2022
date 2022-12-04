@@ -1,4 +1,4 @@
-const input = await Deno.readTextFile("./input1");
+const input = await Deno.readTextFile("./inputs/input1");
 
 const groups = input.split("\n\n");
 

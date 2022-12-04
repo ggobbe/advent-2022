@@ -1,4 +1,4 @@
-const input = await Deno.readTextFile("./input4");
+const input = await Deno.readTextFile("./inputs/input4");
 const lines = input.split("\n");
 
 type Range = {

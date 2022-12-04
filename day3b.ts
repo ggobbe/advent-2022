@@ -1,6 +1,6 @@
 import { chunk } from "https://deno.land/std@0.150.0/collections/chunk.ts";
 
-const input = await Deno.readTextFile("./input3");
+const input = await Deno.readTextFile("./inputs/input3");
 const lines = input.split("\n");
 
 const letterToNumber = (character: string) => {

@@ -32,7 +32,7 @@ const shapeScore: Record<Shape, number> = {
   scissors: 3,
 };
 
-const input = await Deno.readTextFile("./input2");
+const input = await Deno.readTextFile("./inputs/input2");
 const lines = input.split("\n");
 
 const strategy: Game[] = lines
