@@ -1,44 +1,58 @@
 import { chunk } from "https://deno.land/std@0.150.0/collections/chunk.ts";
 
+const CrateMover = {
+  buildStacks: (positions: string[]) => {
+    const stacks: Array<Array<string>> = [];
+    for (const position of positions) {
+      const chars = position.split("");
+      const chunks = chunk(chars, 4);
+      const crates = chunks.map((c) => c[1]);
+
+      for (let i = 0; i < crates.length; i++) {
+        stacks[i] ??= [];
+        if (crates[i].trim()) {
+          stacks[i].push(crates[i]);
+        }
+      }
+    }
+
+    return stacks.map((s) => s.reverse());
+  },
+  applyMovements: (inputStacks: Array<Array<string>>, movements: string[]) => {
+    const outputStacks = structuredClone(inputStacks) as typeof inputStacks;
+    for (const movement of movements) {
+      const moveGroups = movement.match(/^move (\d+) from (\d+) to (\d+)$/);
+      if (!moveGroups) {
+        continue;
+      }
+
+      const [_, amountTxt, sourceTxt, targetTxt] = moveGroups;
+      const amount = +amountTxt;
+      const sourceIndex = +sourceTxt - 1;
+      const targetIndex = +targetTxt - 1;
+
+      for (let x = 0; x < amount; x++) {
+        const out = outputStacks[sourceIndex].pop();
+        if (!out) {
+          continue;
+        }
+
+        outputStacks[targetIndex].push(out);
+      }
+    }
+    return outputStacks;
+  },
+};
+
 const input = await Deno.readTextFile("./inputs/input5");
 const lines = input.split("\n");
 
-const stacks: Array<Array<string>> = [];
+const positions = lines.filter((l) => /^\s*(\[[A-Z]\]\s*)+$/.test(l));
+const movements = lines.filter((l) => /^move/.test(l));
 
-lines.map((l) => {
-  const chars = l.split("");
-  const chunks = chunk(chars, 4);
-  const crates = chunks.map((c) => c[1]);
+const stacks = CrateMover.buildStacks(positions);
+const movedStacks = CrateMover.applyMovements(stacks, movements);
 
-  if (/^\s*(\[[A-Z]\]\s*)+$/.test(l)) {
-    for (let i = 0; i < crates.length; i++) {
-      stacks[i] ??= [];
-      if (crates[i].trim()) {
-        stacks[i].push(crates[i]);
-      }
-    }
-  }
+const topCrates = movedStacks.map((s) => s[s.length - 1]);
 
-  if (/^(\s[1-9]\s+)+$/.test(l)) {
-    for (let i = 0; i < stacks.length; i++) {
-      stacks[i] = stacks[i].reverse();
-    }
-  }
-
-  const moveGroups = l.match(/^move (\d+) from (\d+) to (\d+)$/);
-  if (moveGroups) {
-    const [_, amountTxt, sourceTxt, targetTxt] = moveGroups;
-    const amount = +amountTxt;
-    const source = +sourceTxt - 1;
-    const target = +targetTxt - 1;
-
-    for (let x = 0; x < amount; x++) {
-      const out = stacks[source].pop();
-      stacks[target].push(out ?? "0");
-    }
-  }
-});
-
-const firsts = stacks.map(s => s[s.length - 1]);
-
-console.log(firsts.join(''));
+console.log(topCrates.join(""));
